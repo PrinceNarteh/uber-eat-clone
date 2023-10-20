@@ -6,6 +6,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { z } from 'zod';
+import { RestaurantsModule } from './restaurants/restaurants.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { z } from 'zod';
       driver: ApolloDriver,
       autoSchemaFile: true,
     }),
+    RestaurantsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
