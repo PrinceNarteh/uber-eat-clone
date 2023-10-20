@@ -6,8 +6,12 @@ services:
     restart: always
     ports:
       - "5432:5432"
+    env_file:
+      - .env
     environment:
-      POSTGRES_PASSWORD: "admin"
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
 
   adminer:
     image: adminer
@@ -16,10 +20,17 @@ services:
       - "8080:8080"
 
   backend:
-    build: ./uber-eat-backend
+    build:
+      context: ./uber-eat-backend
+      dockerfile: Dockerfile
+      target: dev
     ports:
       - "3000:3000"
     depends_on:
       - db
     volumes:
-      - ./:/app
+      - ./uber-eat-backend/:/app
+      - /app/node_modules
+    command: npm run start:dev
+    env_file:
+      - ./uber-eat-backend/.env.dev
