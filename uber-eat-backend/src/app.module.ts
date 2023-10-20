@@ -5,7 +5,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
-import * as process from 'process';
+import { z } from 'zod';
 
 @Module({
   imports: [
@@ -18,6 +18,14 @@ import * as process from 'process';
           ? '.env.prod'
           : '.env.test',
       ignoreEnvFile: process.env.NODE_ENV === 'prod',
+      validationSchema: z.object({
+        NODE_ENV: z.enum(['prod', 'dev', 'test']),
+        DB_HOST: z.string(),
+        DB_PORT: z.number(),
+        DB_USERNAME: z.string(),
+        DB_PASSWORD: z.string(),
+        DB_DATABASE: z.string(),
+      }),
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
