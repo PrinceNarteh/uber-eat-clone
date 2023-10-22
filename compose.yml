@@ -7,7 +7,7 @@ services:
     ports:
       - "5432:5432"
     env_file:
-      - .env
+      - ./uber-eat-backend/.env.dev
     environment:
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
@@ -29,8 +29,8 @@ services:
     depends_on:
       - db
     volumes:
-      - ./uber-eat-backend/:/app
+      - ./src:/app/src
       - /app/node_modules
-    command: npm run start:dev
+    command: yarn run start:dev
     env_file:
       - ./uber-eat-backend/.env.dev

@@ -8,16 +8,16 @@ RUN addgroup app && adduser -S -G app app
 WORKDIR /app
 
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
-COPY package*.json ./
+COPY package.json ./
 
 # Install app dependencies
-RUN npm install --only=dev
+RUN yarn install --only=dev
 
 # Bundle app source
 COPY . .
 
 # Creates a "dist" folder with the production build
-RUN npm run build
+CMD ["yarn", "run", "start:dev"]
 
 
 # Creating production build
@@ -31,11 +31,13 @@ ENV NODE_ENV=${NODE_ENV}
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY package.json ./
 
-RUN npm install --only=prod
+RUN yarn install --only=prod
 
 COPY . .
+
+RUN yarn run build
 
 COPY --from=dev /app/dist ./dist
 
